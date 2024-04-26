@@ -48,7 +48,7 @@
         }
 
         .meal-card {
-            flex-basis: calc(20% - 20px);
+            flex-basis: calc(33.33% - 20px);
             margin: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
@@ -68,6 +68,13 @@
             position: fixed;
             bottom: 0;
             width: 100%;
+        }
+
+        /* Mobile responsiveness */
+        @media screen and (max-width: 600px) {
+            .meal-card {
+                flex-basis: calc(50% - 20px);
+            }
         }
     </style>
 </head>
