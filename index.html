@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meal Search</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        .search-container {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .search-container input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        .search-container button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .results-container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .meal-card {
+            flex-basis: calc(20% - 20px);
+            margin: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        .meal-card img {
+            width: 100%;
+            border-radius: 5px;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Meal Search</h1>
+    </header>
+    <main>
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Type a meal...">
+            <button id="searchButton">Search</button>
+        </div>
+        <div id="mealResults" class="results-container"></div>
+        <button id="showAllButton" style="display: none;">Show All</button>
+    </main>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const searchInput = document.getElementById("searchInput");
+            const searchButton = document.getElementById("searchButton");
+            const mealResults = document.getElementById("mealResults");
+            const showAllButton = document.getElementById("showAllButton");
+
+            searchButton.addEventListener("click", () => {
+                const searchTerm = searchInput.value.trim();
+                if (searchTerm !== "") {
+                    searchMeal(searchTerm);
+                }
+            });
+
+            function searchMeal(searchTerm) {
+                const apiUrl = `https://www.themealdb.com/api/json/v1/1/search.php?s=${searchTerm}`;
+                fetch(apiUrl)
+                    .then(response => response.json())
+                    .then(data => {
+                        displayResults(data.meals);
+                    })
+                    .catch(error => {
+                        console.error("Error fetching data:", error);
+                    });
+            }
+
+            function displayResults(meals) {
+                mealResults.innerHTML = "";
+                if (meals) {
+                    meals.slice(0, 5).forEach(meal => {
+                        const mealCard = createMealCard(meal);
+                        mealResults.appendChild(mealCard);
+                    });
+
+                    if (meals.length > 5) {
+                        showAllButton.style.display = "block";
+                        showAllButton.addEventListener("click", () => {
+                            mealResults.innerHTML = "";
+                            meals.forEach(meal => {
+                                const mealCard = createMealCard(meal);
+                                mealResults.appendChild(mealCard);
+                            });
+                            showAllButton.style.display = "none";
+                        });
+                    } else {
+                        showAllButton.style.display = "none";
+                    }
+                } else {
+                    mealResults.innerHTML = "<p>No results found</p>";
+                    showAllButton.style.display = "none";
+                }
+            }
+
+            function createMealCard(meal) {
+                const mealCard = document.createElement("div");
+                mealCard.classList.add("meal-card");
+
+                const mealImage = document.createElement("img");
+                mealImage.src = meal.strMealThumb;
+                mealImage.alt = meal.strMeal;
+                mealCard.appendChild(mealImage);
+
+                const mealName = document.createElement("h3");
+                mealName.textContent = meal.strMeal;
+                mealCard.appendChild(mealName);
+
+                const mealId = document.createElement("p");
+                mealId.textContent = `ID: ${meal.idMeal}`;
+                mealCard.appendChild(mealId);
+
+                const mealInstructions = document.createElement("p");
+                mealInstructions.textContent = meal.strInstructions;
+                mealCard.appendChild(mealInstructions);
+
+                return mealCard;
+            }
+        });
+    </script>
+</body>
+</html>
