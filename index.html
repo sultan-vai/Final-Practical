@@ -4,77 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meal Search</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
+      
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+}
 
-        header {
-            background-color: #333;
-            color: #fff;
-            padding: 20px;
-            text-align: center;
-        }
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    position: fixed; 
+    width: 100%; 
+    bottom: 0;
+}
 
-        main {
-            padding: 20px;
-        }
+footer p {
+    margin: 0; 
+}
 
-        .search-container {
-            display: flex;
-            margin-bottom: 20px;
-        }
-
-        .search-container input[type="text"] {
-            flex: 1;
-            padding: 10px;
-            font-size: 16px;
-        }
-
-        .search-container button {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-
-        .results-container {
-            display: flex;
-            flex-wrap: wrap;
-        }
 
         .meal-card {
-            flex-basis: calc(33.33% - 20px);
-            margin: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 10px;
+            margin-bottom: 20px;
         }
 
         .meal-card img {
             width: 100%;
             border-radius: 5px;
-        }
-
-        footer {
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            padding: 10px;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-
-        /* Mobile responsiveness */
-        @media screen and (max-width: 600px) {
-            .meal-card {
-                flex-basis: calc(50% - 20px);
-            }
         }
     </style>
 </head>
@@ -82,17 +43,26 @@
     <header>
         <h1>Meal Search</h1>
     </header>
-    <main>
-        <div class="search-container">
-            <input type="text" id="searchInput" placeholder="Type a meal...">
-            <button id="searchButton">Search</button>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 offset-md-2 col-lg-6 offset-lg-3">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" id="searchInput" placeholder="Type a meal...">
+                    <div class="input-group-append">
+                        <button class="btn btn-success" type="button" id="searchButton">Search</button>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div id="mealResults" class="results-container"></div>
-        <button id="showAllButton" style="display: none;">Show All</button>
-    </main>
+        <div id="mealResults" class="row"></div>
+        <button id="showAllButton" class="btn btn-primary btn-block" style="display: none;">Show All</button>
+    </div>
     <footer>
         <p>&copy; 2024 Meal Search</p>
     </footer>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const searchInput = document.getElementById("searchInput");
@@ -147,27 +117,40 @@
             }
 
             function createMealCard(meal) {
-                const mealCard = document.createElement("div");
-                mealCard.classList.add("meal-card");
+                const col = document.createElement("div");
+                col.classList.add("col-md-6", "col-lg-4", "meal-card");
 
-                const mealImage = document.createElement("img");
-                mealImage.src = meal.strMealThumb;
-                mealImage.alt = meal.strMeal;
-                mealCard.appendChild(mealImage);
+                const card = document.createElement("div");
+                card.classList.add("card");
 
-                const mealName = document.createElement("h3");
-                mealName.textContent = meal.strMeal;
-                mealCard.appendChild(mealName);
+                const img = document.createElement("img");
+                img.src = meal.strMealThumb;
+                img.classList.add("card-img-top");
+                img.alt = meal.strMeal;
 
-                const mealId = document.createElement("p");
-                mealId.textContent = `ID: ${meal.idMeal}`;
-                mealCard.appendChild(mealId);
+                const cardBody = document.createElement("div");
+                cardBody.classList.add("card-body");
 
-                const mealInstructions = document.createElement("p");
-                mealInstructions.textContent = meal.strInstructions;
-                mealCard.appendChild(mealInstructions);
+                const name = document.createElement("h5");
+                name.classList.add("card-title");
+                name.textContent = meal.strMeal;
 
-                return mealCard;
+                const id = document.createElement("p");
+                id.classList.add("card-text");
+                id.textContent = `ID: ${meal.idMeal}`;
+
+                const instructions = document.createElement("p");
+                instructions.classList.add("card-text");
+                instructions.textContent = meal.strInstructions;
+
+                cardBody.appendChild(name);
+                cardBody.appendChild(id);
+                cardBody.appendChild(instructions);
+                card.appendChild(img);
+                card.appendChild(cardBody);
+                col.appendChild(card);
+
+                return col;
             }
         });
     </script>
