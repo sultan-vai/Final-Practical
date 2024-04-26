@@ -60,7 +60,15 @@
             border-radius: 5px;
         }
 
-        
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -75,7 +83,9 @@
         <div id="mealResults" class="results-container"></div>
         <button id="showAllButton" style="display: none;">Show All</button>
     </main>
-    
+    <footer>
+        <p>&copy; 2024 Meal Search</p>
+    </footer>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const searchInput = document.getElementById("searchInput");
